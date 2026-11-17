@@ -25,5 +25,11 @@ def test_moyenne(conn):
     add_student(conn, "Amel", 10)
     add_student(conn, "Karim", 14)
     assert average_grade(conn) == 12.0
+    
 def average_grade(conn):
-    raise NotImplementedError()
+    # Retourne la moyenne des notes, ou None s'il n'y a aucun étudiant.
+    with conn, conn.cursor() as cur:
+        cur.execute("SELECT AVG(grade) FROM students")
+        value = cur.fetchone()[0]
+        return float(value) if value is not None else None
+    
